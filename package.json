@@ -1,5 +1,5 @@
 {
-  "name": "@relativityboy/js-util",
+  "name": "@relativity/js-util",
   "version": "0.1.0",
   "description": "A few utility functions. Zero Deps.",
   "main": "index.js",
