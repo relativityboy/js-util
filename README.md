@@ -6,6 +6,6 @@ It was created to hold just a few utility functions, & to keep app bloat and fil
 
 It's nothing special.
 
-If you're looking for a generic util solution it's probably worth looking at 
+If you're looking for a generic util solution consider 
 [lodash](https://www.npmjs.com/package/lodash), a more complete
 and better tested util library.  
