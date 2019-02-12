@@ -23,12 +23,12 @@ export const filter = (keys, obj=false) => {
     return keys.reduce((acc, key) => {
       if (keys.includes(key)) acc[key] = obj[key]
       return acc
-    })
+    }, {})
   return (obj) => {
     return keys.reduce((acc, key) => {
       if (keys.includes(key)) acc[key] = obj[key]
       return acc
-    })
+    }, {})
   }
 }
 
