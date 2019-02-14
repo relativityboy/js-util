@@ -32,6 +32,21 @@ export const filter = (keys, obj=false) => {
   }
 }
 
+export const reduce = (iteratee, reducer, start) => {
+  let acc = start
+  if(iteratee.constructor === Array) {
+    for(let i = 0; i < iteratee.length; i++) {
+      acc = reducer(acc, iteratee[i], i)
+    }
+  } else {
+    const keys = Object.keys(iteratee)
+    for(let i = 0; i < keys.length; i++) {
+      acc = reducer(acc, iteratee[keys[i]], keys[i])
+    }
+  }
+  return acc
+}
+
 
 /**
  * Makes a camelCased copy of a snake_cased string
