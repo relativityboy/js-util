@@ -122,12 +122,19 @@ export const findAllBy = (list, propName, propValue) => {
  * @param list
  * @param propName
  * @param newItem
+ * @param unshift=false if true, new items will be put at the beginning of the list
  * @returns {Uint8Array | BigInt64Array | *[] | Float64Array | Int8Array | Float32Array | Int32Array | Uint32Array | Uint8ClampedArray | BigUint64Array | Int16Array | Uint16Array}
  */
-export const putOneBy = (list, propName, newItem) => {
+export const putOneBy = (list, propName, newItem, unshift=false) => {
   let found = false
   const respList = list.map(item => (item[propName] === newItem[propName] && (found = true))? newItem : item )
-  if(!found) respList.push(newItem)
+  if(!found) {
+    if(unshift) {
+      respList.unshift(newItem)
+    } else {
+      respList.push(newItem)
+    }
+  }
   return respList
 }
 
