@@ -33,6 +33,31 @@ export const filter = (keys, obj=false) => {
   }
 }
 
+/**
+ *
+ * @param filterOutAttributes
+ * @param obj
+ * @param filterIn
+ * @returns {*}
+ */
+export const filterOut = (filterOutAttributes=[], obj, filterIn=false) => {
+  if(filterIn) {
+    return this.filterIn.reduce((acc, key)=> {
+      if(obj.hasOwnProperty(key) && !filterOutAttributes.includes(key)) {
+        acc[key] = obj[key]
+      }
+      return acc
+    }, {})
+  } else {
+    return Object.keys(obj).reduce((acc, key)=>{
+      if(!filterOutAttributes.includes(key)) {
+        acc[key] = obj[key]
+      }
+      return acc
+    })
+  }
+}
+
 export const reduce = (iteratee, reducer, start) => {
   let acc = start
   if(iteratee.constructor === Array) {
@@ -295,7 +320,7 @@ export const millis = seconds => seconds * 1000
  * @param millis
  * @returns {number}
  */
-export const seconds = millis => Math.floor(millis / 1000)
+export const seconds = (millis=false) => Math.floor(((typeof millis !== 'boolean')? millis : Date.now()) / 1000)
 
 /**
  * Returns a 'pretty' formatted json string
