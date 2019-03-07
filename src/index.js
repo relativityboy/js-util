@@ -54,7 +54,7 @@ export const filterOut = (filterOutAttributes=[], obj, filterIn=false) => {
         acc[key] = obj[key]
       }
       return acc
-    })
+    }, {})
   }
 }
 
