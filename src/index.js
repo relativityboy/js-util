@@ -33,6 +33,14 @@ export const filter = (keys, obj=false) => {
   }
 }
 
+export const elapsed = (start=false) => {
+  if(!start) {
+    const strt = Date.now()
+    return () => (Date.now() - strt) / 1000
+  }
+  return (Date.now() - start) / 1000
+}
+
 /**
  *
  * @param filterOutAttributes
@@ -138,6 +146,114 @@ export const findAllBy = (list, propName, propValue) => {
       resp.push(Object.assign({}, list[i]))
     }
   }
+  return resp
+}
+
+const searchAllExpressions = {
+  '=':(compareValue) => (val) => val === compareValue,
+  '<':(compareValue) => (val) => val < compareValue,
+  '>':(compareValue) => (val) => val > compareValue,
+  '>=':(compareValue) => (val) => val > compareValue || val === compareValue,
+  '<=':(compareValue) => (val) => val < compareValue || val === compareValue,
+  'startsWith': (compareValue) => (val) => val.starsWith(compareValue),
+  'endsWith':(compareValue) => (val) => val.endsWith(compareValue),
+  'includes': (compareValue) => (val) => val.includes(compareValue),
+  'like':(compareValue) => {
+    let compVal
+    if(compareValue.startsWith('%') && compareValue.endsWith('%')) {
+      compVal = compareValue.slice(1,-1)
+      return searchAllExpressions.includes(compVal)
+    }
+    if(compareValue.startsWith('%')) {
+      compVal = compareValue.slice(1)
+      return searchAllExpressions.endsWith(compVal) == 0
+    }
+    if(compareValue.endsWith('%')) {
+      compVal = compareValue.slice(0,-1)
+      return searchAllExpressions.startsWith(compVal)
+    }
+    return (val) => val === compareValue
+  },
+}
+
+/**
+ * Creates a closure that searches all the 'things' in a list of things, based on thing[propName] === propValue and returns a list of shallow copies
+ * All compar
+ * @param searchParams - {}
+ *  {
+ *    key:'value',
+ *    key2:['like', 'value%'], // '%value', 'value%', '%value%'
+ *    key3:['like', '%value%'],
+ *    key4:['>', value'] // '>', '<', '=', '>=', '<='
+ *  }
+ * @param or boolean - toggles 'all comparisons match' or 'at least one comparison matches'
+ * @returns function
+ *
+ * Closure - when called will return a shallow copy of the matching objects in 'list',
+ * @param list
+ * @param originals - if true, returns originals from 'list'
+ * @returns []
+ */
+export const searchAllBy = (searchParams, or=false) => {
+  const searchExpressions = {}
+  const searchKeys = Object.keys(searchParams)
+  const resp = [];
+
+  searchKeys.forEach((key) => {
+    switch (typeof searchParams[key]) {
+      case 'function' :
+        searchExpressions[key] = (searchParams[key])
+        break
+      case 'object' :
+        if(searchParams[key].constructor === Array) {
+          if(searchParams[key].length !== 2) throw Error(`searchAllBy requires search array expressions be in the form of ['comparator', value]`)
+          if(!searchAllExpressions.hasOwnProperty(searchParams[key][0])) throw Error(`searchAllBy cannot search by '${searchParams[key][0]}`)
+          searchExpressions[key] = searchAllExpressions[searchParams[key][0]](searchParams[key][1])
+        }
+        break
+      default :
+        searchExpressions[key] = searchAllExpressions['='](searchParams[key])
+    }
+  })
+
+  if(or == false)  {
+    return (list, originals=false) => {
+      return list.reduce((acc, item)=> {
+        let push = true
+        for (let i = 0; i < searchKeys.length; j++) {
+          if (!searchExpressions[searchKeys[j]](item[searchKeys[j]])) {
+            push = false
+            break
+          }
+        }
+        if(push) {
+          if(originals) acc.push(item)
+          else acc.push(Object.assign({}, item))
+        }
+        return acc
+      }, [])
+    }
+  } else {
+    return (list, originals=false) => {
+      return list.reduce((acc, item)=> {
+        let push = false
+        for (let i = 0; i < searchKeys.length; j++) {
+          if (searchExpressions[searchKeys[j]](item[searchKeys[j]])) {
+            push = true
+            break
+          }
+        }
+        if(push) {
+          if(originals) acc.push(item)
+          else acc.push(Object.assign({}, item))
+        }
+        return acc
+      }, [])
+    }
+  }
+
+
+
   return resp
 }
 
