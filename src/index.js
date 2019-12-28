@@ -66,13 +66,22 @@ export const filterOut = (filterOutAttributes=[], obj, filterIn=false) => {
   }
 }
 
-export const reduce = (iteratee, reducer, start) => {
-  let acc = start
+/**
+ * Reduces an object or an array. inAcc defaults to an empty object
+ * @param iteratee [], {}
+ * @param reducer ()
+ * @param start
+ * @returns {{}}
+ */
+export const reduce = (iteratee, reducer, start=false) => {
+  let acc
   if(iteratee.constructor === Array) {
+    acc = start? start : []
     for(let i = 0; i < iteratee.length; i++) {
       acc = reducer(acc, iteratee[i], i)
     }
   } else {
+    acc = start? start : {}
     const keys = Object.keys(iteratee)
     for(let i = 0; i < keys.length; i++) {
       acc = reducer(acc, iteratee[keys[i]], keys[i])
@@ -451,3 +460,20 @@ export const jsPretty = (obj) => JSON.stringify(obj, null, 2)
  * @returns {string}
  */
 export const jsPrettyConsole = (obj) => console.log(jsPretty(obj))
+
+const alpha = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+const Alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+const num = ['0','1','2','3','4','5','6','7','8','9']
+const AlphaNum = [...alpha, ...Alpha, ...num]
+
+export const randStr = (charArray, length) => {
+  let resp = ''
+  for(let i = 0; i < length; i++) {
+    resp += charArray[Math.floor(Math.random() * charArray.length)]
+  }
+  return resp
+}
+
+export const randNumStr = (length) => randStr(num, length)
+
+export const randAlphaNum = (length) => randStr(AlphaNum, length)
