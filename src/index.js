@@ -200,13 +200,11 @@ const searchAllExpressions = {
  *
  * Closure - when called will return a shallow copy of the matching objects in 'list',
  * @param list
- * @param originals - if true, returns originals from 'list'
  * @returns []
  */
 export const searchAllBy = (searchParams, or=false) => {
   const searchExpressions = {}
   const searchKeys = Object.keys(searchParams)
-  const resp = [];
 
   searchKeys.forEach((key) => {
     switch (typeof searchParams[key]) {
@@ -260,10 +258,6 @@ export const searchAllBy = (searchParams, or=false) => {
       }, [])
     }
   }
-
-
-
-  return resp
 }
 
 /**
@@ -423,6 +417,27 @@ export const getStatePath = (state, path) => {
  * @returns {function(*=, *): *}
  */
 export const payloadOnly = (fn) => (state, action) => fn(state, action.payload)
+
+/**
+ * Allows you to create a reducer-object where the keys are the action.types
+ * Much faster and safer than if/else or switchblocks
+ * @param inReducerMap
+ * @param payloadOnly
+ * @returns {(function(*=, *=): (*))|*}
+ */
+export const actionKeyReducer = (inReducerMap, payloadOnly=false) => {
+  const {...reducerMap} = inReducerMap
+
+  return (state, action) => {
+    if(reducerMap.hasOwnProperty(action.type)) {
+      if(payloadOnly) {
+        return reducerMap[action.type](state, action.payload)
+      }
+      return reducerMap[action.type](state, action)
+    }
+    return state
+  }
+}
 
 /**
  * Creates a Redux/Saga style action object
