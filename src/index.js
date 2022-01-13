@@ -439,6 +439,35 @@ export const actionKeyReducer = (inReducerMap, payloadOnly=false) => {
   }
 }
 
+export const delayTakeEveryCurry = (takeLatest, delay) => (action, fn, miliseconds=300) => {
+  function* watchInput(payload) {
+    yield delay(miliseconds)
+    yield fn(payload)
+  }
+  return takeLatest(action, watchInput)
+}
+
+/**
+ * Allows declaration of sagas as a simple mapped object, with automatic assignment of
+ * saga to takeEvery & takeLatest and delayTakeEvery (a debounce).
+ *
+ * To use first curry with redux-saga's takeEvery, takeLatest, and delay
+ * @param takeEveryFn
+ * @param takeLatestFn
+ * @param delayFn
+ * @param delayMillis
+ * @returns {function({takeEvery?: *, takeLatest?: *, delayTakeEvery?: *, custom?: *}): *[]}
+ */
+export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false, delayMillis=300) => {
+  const delayTakeEveryFn = delayFn ? delayTakeEveryCurry : takeEveryFn
+
+  const assign = (takeFn, sagas) => sagas.keys().map((actn) => takeFn(actn, payloadOnly(sagas[actn])))
+
+  return ({ takeEvery={}, takeLatest={}, delayTakeEvery={}, custom=[]}) => {
+    return [...assign(takeEveryFn, takeEvery), ...assign(takeLatestFn, takeLatest), ...assign(delayTakeEveryFn, delayTakeEvery), ...custom]
+  }
+}
+
 /**
  * Creates a Redux/Saga style action object
  * @param type
