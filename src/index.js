@@ -412,7 +412,7 @@ export const getStatePath = (state, path) => {
 }
 
 /**
- * Filter for Redux/Saga style actions. causes the passed function to only receive payload
+ * Filter for Redux style actions. causes the passed function to only receive payload
  * @param fn
  * @returns {function(*=, *): *}
  */
@@ -448,6 +448,14 @@ export const delayTakeEveryCurry = (takeLatest, delay) => (action, fn, milisecon
 }
 
 /**
+ * Filter for Redux style actions. causes the passed function to only receive payload
+ * @param fn
+ * @returns {function(*=, *): *}
+ */
+export const sagaPayloadOnly = (fn) => (action) => fn(action.payload)
+
+
+/**
  * Allows declaration of sagas as a simple mapped object, with automatic assignment of
  * saga to takeEvery & takeLatest and delayTakeEvery (a debounce).
  *
@@ -461,7 +469,7 @@ export const delayTakeEveryCurry = (takeLatest, delay) => (action, fn, milisecon
 export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false, delayMillis=300) => {
   const delayTakeEveryFn = delayFn ? delayTakeEveryCurry : takeEveryFn
 
-  const assign = (takeFn, sagas) => sagas.keys().map((actn) => takeFn(actn, payloadOnly(sagas[actn])))
+  const assign = (takeFn, sagas) => sagas.keys().map((actn) => takeFn(actn, sagaPayloadOnly(sagas[actn])))
 
   return ({ takeEvery={}, takeLatest={}, delayTakeEvery={}, custom=[]}) => {
     return [...assign(takeEveryFn, takeEvery), ...assign(takeLatestFn, takeLatest), ...assign(delayTakeEveryFn, delayTakeEvery), ...custom]
