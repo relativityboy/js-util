@@ -469,7 +469,7 @@ export const sagaPayloadOnly = (fn) => (action) => fn(action.payload)
 export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false, delayMillis=300) => {
   const delayTakeEveryFn = delayFn ? delayTakeEveryCurry : takeEveryFn
 
-  const assign = (takeFn, sagas) => sagas.keys().map((actn) => takeFn(actn, sagaPayloadOnly(sagas[actn])))
+  const assign = (takeFn, sagas) => Object.keys(sagas).map((actn) => takeFn(actn, sagaPayloadOnly(sagas[actn])))
 
   return ({ takeEvery={}, takeLatest={}, delayTakeEvery={}, custom=[]}) => {
     return [...assign(takeEveryFn, takeEvery), ...assign(takeLatestFn, takeLatest), ...assign(delayTakeEveryFn, delayTakeEvery), ...custom]
