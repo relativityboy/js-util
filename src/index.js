@@ -1,3 +1,5 @@
+export * from './make_on_ready'
+
 /**
  * match an underscore and a word
  * @type {RegExp}
