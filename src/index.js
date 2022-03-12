@@ -175,7 +175,7 @@ const searchAllExpressions = {
     }
     if(compareValue.startsWith('%')) {
       compVal = compareValue.slice(1)
-      return searchAllExpressions.endsWith(compVal) == 0
+      return searchAllExpressions.endsWith(compVal) === 0
     }
     if(compareValue.endsWith('%')) {
       compVal = compareValue.slice(0,-1)
@@ -223,7 +223,7 @@ export const searchAllBy = (searchParams, or=false) => {
     }
   })
 
-  if(or == false)  {
+  if(or === false)  {
     return (list, originals=false) => {
       return list.reduce((acc, item)=> {
         let push = true
@@ -463,10 +463,9 @@ export const sagaPayloadOnly = (fn) => (action) => fn(action.payload)
  * @param takeEveryFn
  * @param takeLatestFn
  * @param delayFn
- * @param delayMillis
  * @returns {function({takeEvery?: *, takeLatest?: *, delayTakeEvery?: *, custom?: *}): *[]}
  */
-export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false, delayMillis=300) => {
+export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false) => {
   const delayTakeEveryFn = delayFn ? delayTakeEveryCurry : takeEveryFn
 
   const assign = (takeFn, sagas) => Object.keys(sagas).map((actn) => takeFn(actn, sagaPayloadOnly(sagas[actn])))
@@ -499,6 +498,7 @@ export const millis = seconds => seconds * 1000
  */
 export const seconds = (millis=false) => Math.floor(((typeof millis !== 'boolean')? millis : Date.now()) / 1000)
 
+
 /**
  * Returns a 'pretty' formatted json string
  * @param obj
@@ -506,12 +506,14 @@ export const seconds = (millis=false) => Math.floor(((typeof millis !== 'boolean
  */
 export const jsPretty = (obj) => JSON.stringify(obj, null, 2)
 
+
 /**
  * Outputs a 'pretty' formatted json string to the console
  * @param obj
  * @returns {string}
  */
 export const jsPrettyConsole = (obj) => console.log(jsPretty(obj))
+
 
 const alpha = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 const Alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -525,6 +527,7 @@ export const randStr = (charArray, length) => {
   }
   return resp
 }
+
 
 export const randNumStr = (length) => randStr(num, length)
 
