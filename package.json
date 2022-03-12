@@ -1,10 +1,10 @@
 {
   "name": "@relativity/js-util",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A few utility functions. Zero production deps.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -o lib/index.js",
+    "build": "babel src --out-dir lib --ignore \"src/**/*.test.js\"",
     "test": "./node_modules/.bin/jest"
   },
   "repository": {
