@@ -48,5 +48,4 @@ export const makeOnReady = () => {
   onReady.isReady = isReady
 
   return onReady
-
 }
