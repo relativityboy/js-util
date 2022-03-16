@@ -1,4 +1,5 @@
 export * from './make_on_ready'
+export * from './set_next_t_context'
 
 /**
  * match an underscore and a word
@@ -304,6 +305,7 @@ export const indexify = (list, attrName) => {
  * get a function that can find all items in the list by attribute attrName in constant time. The response is always an array of items.
  * @param list
  * @param attrName
+ * @param raw - if you want the raw object instead of a function (not recommended)
  * @returns {function(*, *): *}
  */
 export const indexifyArrays = (list, attrName, raw=false) => {
