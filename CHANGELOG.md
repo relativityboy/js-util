@@ -1,5 +1,8 @@
 # Change log
 
+## V 0.8.1
+* added type argument errors and tests for `action` - redux helper
+
 ## V 0.8.0
 * added `setNextTContext` - i18Next helper for deep language text paths
 

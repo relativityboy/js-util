@@ -1,5 +1,6 @@
 export * from './make_on_ready'
 export * from './set_next_t_context'
+export * from './action'
 
 /**
  * match an underscore and a word
@@ -479,13 +480,7 @@ export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false) => {
   }
 }
 
-/**
- * Creates a Redux/Saga style action object
- * @param type
- * @param payload
- * @returns {{payload: *, type: *}}
- */
-export const action = (type, payload) =>{ return {type, payload} }
+
 
 
 /**

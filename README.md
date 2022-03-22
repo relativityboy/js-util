@@ -15,6 +15,19 @@ and better tested util library.
 ## Functions by category
 
 ### redux
+**action** - a simple function to make producing actions cleaner and more reliable. 
+The action type has to be a string, and if payload isn't passed in, becomes an undefined property (this helps with other automations like payloadOnly).
+``` 
+// OLD
+dispatch({
+  action:'My action',
+  payload: { some:'random payload' }
+})
+
+// Becomes
+dispatch(action('My action', { some:'random payload' }))
+```
+
 
 ### redux-saga
 
@@ -25,7 +38,7 @@ and better tested util library.
 ```
 **setNextTContext** - to help with deep language paths. Simpler and more reliable than in-place dummy-text interpolators 
 ```
-// i18Next
+// OLD i18Next
 t('some.annoyingly.deep.path.to.text1')
 t('some.annoyingly.deep.path.to.text2')
 t('some.annoyingly.deep.path.to.even.more.text')
