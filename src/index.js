@@ -1,6 +1,7 @@
+export * from './action'
+export * from './action_key_reducer'
 export * from './make_on_ready'
 export * from './set_next_t_context'
-export * from './action'
 
 /**
  * match an underscore and a word
@@ -423,26 +424,6 @@ export const getStatePath = (state, path) => {
  */
 export const payloadOnly = (fn) => (state, action) => fn(state, action.payload)
 
-/**
- * Allows you to create a reducer-object where the keys are the action.types
- * Much faster and safer than if/else or switchblocks
- * @param inReducerMap
- * @param payloadOnly
- * @returns {(function(*=, *=): (*))|*}
- */
-export const actionKeyReducer = (inReducerMap, payloadOnly=false) => {
-  const {...reducerMap} = inReducerMap
-
-  return (state, action) => {
-    if(reducerMap.hasOwnProperty(action.type)) {
-      if(payloadOnly) {
-        return reducerMap[action.type](state, action.payload)
-      }
-      return reducerMap[action.type](state, action)
-    }
-    return state
-  }
-}
 
 export const delayTakeEveryCurry = (takeLatest, delay) => (action, fn, miliseconds=300) => {
   function* watchInput(payload) {

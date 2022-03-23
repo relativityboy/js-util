@@ -28,6 +28,24 @@ dispatch({
 dispatch(action('My action', { some:'random payload' }))
 ```
 
+**actionKeyReducer** - Allows you to create a reducer-object where the keys are the action.types 
+Much faster and less error prone than `if/else` or `switch` blocks
+
+Example with three actions:
+```
+const updateUsername = (state, userName) => (
+        {...state, user: {...state.user, userName}}
+    )
+
+const reducers = {
+    [ACTN_LOGIN]: (state, user) => ({...state, user}),
+    [ACTN_LOGOUT]: (state) => ({...state, user: false}),
+    [ACTN_UPDATE_USERNAME]: updateUsername
+}
+
+export default actionKeyReducer(reducers, true)
+```
+
 
 ### redux-saga
 
