@@ -1,5 +1,6 @@
 export * from './action'
 export * from './action_key_reducer'
+export * from './get_state_path'
 export * from './make_on_ready'
 export * from './set_next_t_context'
 
@@ -400,22 +401,6 @@ const newStateByPath = (state, path, propValue, merge=false ) => {
   return Object.assign({}, state, childState)
 }
 
-
-/**
- * Passed into redux-saga select
- * @param state
- * @param path
- * @returns {string}
- */
-export const getStatePath = (state, path) => {
-  const pathNodes = path.split('.')
-
-  if(!path) return state
-
-  return pathNodes.reduce((acc, pathNode) => {
-    return acc[pathNode]
-  }, state)
-}
 
 /**
  * Filter for Redux style actions. causes the passed function to only receive payload

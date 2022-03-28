@@ -46,10 +46,15 @@ const reducers = {
 export default actionKeyReducer(reducers, true)
 ```
 
+**getStatePath** - retrieves a node from an object tree. Returns undefined otherwise. 
+Less relevant now that support for `?.` is widespread, but still very convenient for dynamic paths.
+
+See [tests for examples](./src/get_state_path.test.js).
 
 ### redux-saga
 
 ### generic 
+
 
 **makeOnReady** - an on-ready queue in a single line, with data! - save yourself 20 lines of code and 80 lines of tests!
 ```
