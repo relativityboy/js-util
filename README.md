@@ -28,10 +28,33 @@ dispatch({
 dispatch(action('My action', { some:'random payload' }))
 ```
 
+**actionKeyReducer** - Allows you to create a reducer-object where the keys are the action.types 
+Much faster and less error prone than `if/else` or `switch` blocks
+
+Example with three actions:
+```
+const updateUsername = (state, userName) => (
+        {...state, user: {...state.user, userName}}
+    )
+
+const reducers = {
+    [ACTN_LOGIN]: (state, user) => ({...state, user}),
+    [ACTN_LOGOUT]: (state) => ({...state, user: false}),
+    [ACTN_UPDATE_USERNAME]: updateUsername
+}
+
+export default actionKeyReducer(reducers, true)
+```
+
+**getStatePath** - retrieves a node from an object tree. Returns undefined otherwise. 
+Less relevant now that support for `?.` is widespread, but still very convenient for dynamic paths.
+
+See [tests for examples](./src/get_state_path.test.js).
 
 ### redux-saga
 
 ### generic 
+
 
 **makeOnReady** - an on-ready queue in a single line, with data! - save yourself 20 lines of code and 80 lines of tests!
 ```
