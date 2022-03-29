@@ -3,6 +3,9 @@ export * from './action_key_reducer'
 export * from './get_state_path'
 export * from './make_on_ready'
 export * from './set_next_t_context'
+export * from './saga_payload_only'
+export * from './delay_take_every_curry'
+export * from './make_sagas'
 
 /**
  * match an underscore and a word
@@ -408,46 +411,6 @@ const newStateByPath = (state, path, propValue, merge=false ) => {
  * @returns {function(*=, *): *}
  */
 export const payloadOnly = (fn) => (state, action) => fn(state, action.payload)
-
-
-export const delayTakeEveryCurry = (takeLatest, delay) => (action, fn, miliseconds=300) => {
-  function* watchInput(payload) {
-    yield delay(miliseconds)
-    yield fn(payload)
-  }
-  return takeLatest(action, watchInput)
-}
-
-/**
- * Filter for Redux style actions. causes the passed function to only receive payload
- * @param fn
- * @returns {function(*=, *): *}
- */
-export const sagaPayloadOnly = (fn) => (action) => fn(action.payload)
-
-
-/**
- * Allows declaration of sagas as a simple mapped object, with automatic assignment of
- * saga to takeEvery & takeLatest and delayTakeEvery (a debounce).
- *
- * To use first curry with redux-saga's takeEvery, takeLatest, and delay
- * @param takeEveryFn
- * @param takeLatestFn
- * @param delayFn
- * @returns {function({takeEvery?: *, takeLatest?: *, delayTakeEvery?: *, custom?: *}): *[]}
- */
-export const makeSagas = (takeEveryFn, takeLatestFn, delayFn=false) => {
-  const delayTakeEveryFn = delayFn ? delayTakeEveryCurry : takeEveryFn
-
-  const assign = (takeFn, sagas) => Object.keys(sagas).map((actn) => takeFn(actn, sagaPayloadOnly(sagas[actn])))
-
-  return ({ takeEvery={}, takeLatest={}, delayTakeEvery={}, custom=[]}) => {
-    return [...assign(takeEveryFn, takeEvery), ...assign(takeLatestFn, takeLatest), ...assign(delayTakeEveryFn, delayTakeEvery), ...custom]
-  }
-}
-
-
-
 
 /**
  * Takes a number of seconds and multiplies it by 1000
