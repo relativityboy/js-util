@@ -1,5 +1,5 @@
 import { sagaPayloadOnly } from './saga_payload_only'
-import { delayTakeEveryCurry } from "./delay_take_every_curry"
+import { delayTakeEveryCurry } from './delay_take_every_curry'
 
 /**
  * Allows declaration of sagas as a simple mapped object, with automatic assignment of
