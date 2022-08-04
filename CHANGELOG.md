@@ -1,5 +1,9 @@
 # Change log
 
+## V 0.8.3
+* added cssNames (makes an array where toString() === .join(' '))
+* improved tests for delayTakeEveryCurry
+
 ## V 0.8.1
 * added type argument errors and tests for `action` - redux helper
 
