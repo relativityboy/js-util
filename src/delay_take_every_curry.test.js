@@ -4,8 +4,8 @@ describe('delayTakeEveryCurry', () => {
   let takeLatest, delay, fn
   beforeEach(() => {
     takeLatest = jest.fn()
-    delay = jest.fn()
-    fn = jest.fn()
+    delay = jest.fn(()=>1)
+    fn = jest.fn(()=>2)
   })
 
   it('returns a curried fn', () => {
@@ -27,14 +27,18 @@ describe('delayTakeEveryCurry', () => {
       expect(watchIFn.constructor.name).toEqual('GeneratorFunction')
     })
     it('generator function calls delay & fn with correct props', () => {
-      let action = {some:'object'}
+      const actionName = 'ACTN_SOME_ACTION'
+      const payload = {the:'payload'}
+      const takeLatest = jest.fn((action, watchInput) => watchInput)
+      const watchInput = delayTakeEveryCurry(takeLatest, delay)(actionName, fn, 500)
 
-      const curriedFn = delayTakeEveryCurry(takeLatest, delay, 500)
-      curriedFn(action, fn)
+      const gen = watchInput(payload)
+      gen.next()
+      gen.next()
       expect(delay).toHaveBeenCalledTimes(1)
       expect(delay).toHaveBeenCalledWith(500)
       expect(fn).toHaveBeenCalledTimes(1)
-      expect(fn).toHaveBeenCalledWith(action)
+      expect(fn).toHaveBeenCalledWith(payload)
     })
   })
 })

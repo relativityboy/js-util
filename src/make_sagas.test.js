@@ -6,4 +6,7 @@ import * as delayMock from './delay_take_every_curry'
 // { delayTakeEveryCurry }
 describe('todo - makeSagas',() => {
   let takeEveryFn, takeLatestFn, delayFn = null
+  it('is an empty test', () => {
+    expect(true).toBeTruthy()
+  })
 });
