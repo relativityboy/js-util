@@ -1,6 +1,6 @@
 {
   "name": "@relativity/js-util",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "A few utility functions. Zero production deps.",
   "main": "lib/index.js",
   "scripts": {
