@@ -1,4 +1,30 @@
-import { actionKeyReducer } from "./action_key_reducer"
+import {actionKeyReducer, makeActionCreatorsAndReducer} from './action_key_reducer'
+
+describe('makeActionCreatorsAndReducer', () => {
+  const ACTN_1 = 'ACTN_1'
+  const ACTN_2 = 'ACTN_2'
+  const ACTN_3 = 'ACTN_3'
+  let reduce1, reduce2, reduce3 = null
+  let reducerMap = null
+
+  beforeEach(() => {
+    reduce1 = jest.fn(()=>({actn:1}))
+    reduce2 = jest.fn(()=>({actn:2}))
+    reduce3 = jest.fn(()=>({actn:3}))
+    reducerMap = {
+      [ACTN_1]: reduce1,
+      [ACTN_2]: reduce2,
+      [ACTN_3]: reduce3
+    }
+  })
+
+  it('produces an object with reducer function and action creators', () => {
+    const {reducer, actions} = makeActionCreatorsAndReducer(reducerMap)
+    expect(typeof reducer).toEqual('function')
+    expect(Object.getOwnPropertyNames(actions)).toEqual([ACTN_1, ACTN_2, ACTN_3])
+    expect(actions[ACTN_3]("foo")).toEqual({type: ACTN_3, payload:"foo"})
+  })
+})
 
 describe('actionKeyReducer', () => {
   const ACTN_1 = 'ACTN_1'
@@ -22,6 +48,7 @@ describe('actionKeyReducer', () => {
     const reducer = actionKeyReducer({})
     expect(typeof reducer).toEqual('function')
   })
+
   describe('reducer', () => {
     it('calls only the correct action.type reducer & returns its output', () => {
       const reducer = actionKeyReducer(reducerMap)
