@@ -1,5 +1,9 @@
 # Change log
 
+## V 0.9.0
+* added `makeActionCreatorsAndReducer()`. Takes the same args as `actionKeyReducer`. 
+Returns `{actions, reducer}`. Where actions is an object of action creators, keyed by their type.
+
 ## V 0.8.3
 * added cssNames (makes an array where toString() === .join(' '))
 * improved tests for delayTakeEveryCurry

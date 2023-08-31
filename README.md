@@ -15,7 +15,51 @@ and better tested util library.
 ## Functions by category
 
 ### redux
-**action** - a simple function to make producing actions cleaner and more reliable. 
+**actionKeyReducer** - Allows you to create a reducer-object where the keys are the action.types 
+Much faster and less error prone than `if/else` or `switch` blocks
+
+Example with three actions:
+```javascript
+import { configureStore } from '@reduxjs/toolkit'
+
+const updateUsername = (state, userName) => (
+        {...state, user: {...state.user, userName}}
+    )
+
+const reducerMap = {
+    [ACTN_LOGIN]: (state, user) => ({...state, user}),
+    [ACTN_LOGOUT]: (state) => ({...state, user: false}),
+    [ACTN_UPDATE_USERNAME]: updateUsername
+}
+
+const reducer = actionKeyReducer(reducerMap, true) // the 'true' unwraps the payload from the action, resulting in simpler reducers
+const store = configureStore({reducer, preloadedState: {}})
+
+```
+
+**makeActionCreatorsAndReducer** - creates the same reducer as `actionKeyReducer` but also auto generates action creators to go with it.
+
+Example 
+```javascript
+import { configureStore } from '@reduxjs/toolkit'
+
+//given the reducerMap from above
+
+const {reducer, actions} = makeActionCreatorsAndReducer(reducerMap)
+const store = configureStore({reducer, preloadedState: {}})
+store.dispatch(
+  actions[ACTN_LOGIN]( {userName:'bob'} )
+)
+
+// the created action looks like  {type: ACTN_LOGIN, payload: {userName:'bob'}}
+```
+
+**getStatePath** - retrieves a node from an object tree. Returns undefined otherwise. 
+Less relevant now that support for `?.` is widespread, but still very convenient for dynamic paths.
+
+See [tests for examples](./src/get_state_path.test.js).
+
+**action** - a simple function to make producing actions cleaner and more reliable.
 The action type has to be a string, and if payload isn't passed in, becomes an undefined property (this helps with other automations like payloadOnly).
 ``` 
 // OLD
@@ -27,29 +71,6 @@ dispatch({
 // Becomes
 dispatch(action('My action', { some:'random payload' }))
 ```
-
-**actionKeyReducer** - Allows you to create a reducer-object where the keys are the action.types 
-Much faster and less error prone than `if/else` or `switch` blocks
-
-Example with three actions:
-```
-const updateUsername = (state, userName) => (
-        {...state, user: {...state.user, userName}}
-    )
-
-const reducers = {
-    [ACTN_LOGIN]: (state, user) => ({...state, user}),
-    [ACTN_LOGOUT]: (state) => ({...state, user: false}),
-    [ACTN_UPDATE_USERNAME]: updateUsername
-}
-
-export default actionKeyReducer(reducers, true)
-```
-
-**getStatePath** - retrieves a node from an object tree. Returns undefined otherwise. 
-Less relevant now that support for `?.` is widespread, but still very convenient for dynamic paths.
-
-See [tests for examples](./src/get_state_path.test.js).
 
 ### redux-saga
 
