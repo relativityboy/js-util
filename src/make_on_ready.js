@@ -1,7 +1,7 @@
 /**
- * Use makeOnReady to call functions automatically after a 'ready' event has happened (ex some data becomes available).
+ * Use makeOnReady to call a set of functions automatically after a 'ready' event has happened (ex some data becomes available).
  * Multiple instances supported.
- * Useful for asynchronous coding.
+ * Useful for asynchronous coding, particularly when you do not know if the desired application state has been reached yet or not.
  *
  * Example -
  * import { makeOnReady } from '@relativityboy/js-util'

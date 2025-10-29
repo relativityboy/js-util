@@ -18,6 +18,10 @@ and better tested util library.
 **actionKeyReducer** - Allows you to create a reducer-object where the keys are the action.types 
 Much faster and less error prone than `if/else` or `switch` blocks
 
+_After the creation of `makeActionCreatorsAndReducer` Redux Toolkit introduced `createSlice`, which follows a very similar pattern.
+While the actionKeyReducer is a little faster, `createSlice` is widely adopted and well supported. Unless you need the 
+speed and customizability, i recommend using `createSlice` .
+
 Example with three actions:
 ```javascript
 import { configureStore } from '@reduxjs/toolkit'
