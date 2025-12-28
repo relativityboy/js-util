@@ -7,6 +7,7 @@ export * from './set_next_t_context'
 export * from './saga_payload_only'
 export * from './delay_take_every_curry'
 export * from './make_sagas'
+export * from './static_state_getter'
 
 
 /**
