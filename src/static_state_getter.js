@@ -13,11 +13,23 @@ export const staticStateGetter = (state) => {
     }
 
     getter.subtree = (path) => {
+        if(!path) {
+            throw Error(`Cannot create subtree. Empty path '${path}' is not permitted`)
+        }
         const subState = getStatePath(state, path)
         if(typeof subState === 'undefined') {
             throw Error(`Cannot create subtree. Path '${path}' is undefined`)
         }
         return staticStateGetter(subState)
+    }
+
+    getter.liveSubtree = (path) => {
+        if(!path) {
+            throw Error(`Cannot create liveSubtree. Empty path '${path}' is not permitted`)
+        }
+        return (subPath, defaultVal=undefined) => {
+            return getStatePath(state, `${path}.${subPath}`, defaultVal)
+        }
     }
     return getter
 }
